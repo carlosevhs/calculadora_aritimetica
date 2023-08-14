@@ -1,66 +1,66 @@
-<script>
+<script setup>
+import { reactive } from 'vue';
 
-export default {
-    data() {
-    return {
-        numero1: 0,
-        numero2: 0,
-        operacao: 'soma'
-    };
-    },
-    computed: {
-    resultado() {
-        const num1 = parseFloat(this.numero1);
-        const num2 = parseFloat(this.numero2);
+const estado = reactive({
+  numero1: 0,
+  numero2: 0,
+  filtro: 'adicao',
+})
 
-        switch (this.operacao) {
-        case 'soma':
-            return num1 + num2;
+
+function resultado() {
+  const {numero1, numero2, filtro} = estado;
+
+  switch (filtro) {
+        case 'adicao':
+            return numero1 + numero2;
         case 'subtracao':
-            return num1 - num2;
+            return numero1 - numero2;
         case 'multiplicacao':
-            return num1 * num2;
+            return numero1 * numero2;
         case 'divisao':
-            return num1 / num2;
+            return numero1 / numero2;
         default:
             return 0;
         }
-    }
-    },
-    methods: {
-    atualizarCalculo() {
-        
-    }
-    }
-};
+}
+
 
 </script>
 
 <template>
 
   <div class="container">
-    <input type="number" v-model="numero1" @input="atualizarCalculo" />
-    <br/>
-    <select class="select" v-model="operacao" @change="atualizarCalculo">
-        <option value="soma">+</option>
-        <option value="subtracao">-</option>
-        <option value="multiplicacao">*</option>
-        <option value="divisao">/</option>
+    <h1>CALCULADORA ARITIMÉTICA</h1>
+
+    <input type="number"  @change="evento => estado.numero1 = parseInt(evento.target.value)" @keyup="evento => estado.numero1 = parseInt(evento.target.value)">
+  <br/>
+    <select @change="evento => estado.filtro = evento.target.value">
+      <option value="adicao">+</option>
+      <option value="subtracao">-</option>
+      <option value="multiplicacao">*</option>
+      <option value="divisao">/</option>
     </select>
-    <br/>
-    <input type="number" v-model="numero2" @input="atualizarCalculo" />
-    <p>Resultado: {{ resultado }}</p>
-  </div>
-    
-    
+  
+  <br/>
+  <input  type="number" @change="evento => estado.numero2 = parseInt(evento.target.value)" @keyup="evento => estado.numero2 = parseInt(evento.target.value)">
+  <br/>
+  
+  <p>Resultado: {{ resultado() }} </p>
+
+  </div>  
+
 </template>
 
-<style >
-
+<style scoped>
   .container {
     max-width:300px;
     align-items: center;
     margin: 100px auto;
+  }
+
+  h1 {
+    text-align: center;
   }
 
   input {
